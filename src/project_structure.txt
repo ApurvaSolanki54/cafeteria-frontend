@@ -1,0 +1,18 @@
+cafeteria-frontend/
+├── index.html
+├── vite.config.js
+├── package.json
+├── src/
+│   ├── main.jsx              ← app entry point
+│   ├── App.jsx               ← routing
+│   ├── index.css             ← global styles
+│   ├── api/
+│   │   └── axios.js          ← all API calls in one place
+│   ├── context/
+│   │   └── AuthContext.jsx   ← global login state
+│   └── pages/
+│       ├── Login.jsx
+│       ├── Register.jsx
+│       ├── BookTable.jsx     ← employee: browse & book
+│       ├── MyBookings.jsx    ← employee: my bookings
+│       └── AdminPanel.jsx    ← admin: manage cafeterias & tables
