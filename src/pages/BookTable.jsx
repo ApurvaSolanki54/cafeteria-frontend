@@ -1,5 +1,3 @@
-// BookTable.jsx — replace your entire file with this
-
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -45,14 +43,6 @@ export default function BookTable() {
     const [date, setDate] = useState(todayString())
     const [time, setTime] = useState('13:00')
 
-    /*
-     * NEW: We now store two separate lists:
-     * allTables    → every table in the cafeteria (free + booked)
-     * freeTables   → only the tables free at chosen time
-     *
-     * We compute a merged list called "tablesWithStatus" that has
-     * each table marked as FREE or BOOKED.
-     */
     const [allTables, setAllTables] = useState([])
     const [freeTables, setFreeTables] = useState([])
 
@@ -65,13 +55,9 @@ export default function BookTable() {
     function todayString() {
         return new Date().toISOString().split('T')[0]
     }
-
-    // Load cafeterias once on mount
     useEffect(() => {
         loadCafeterias()
     }, [])
-
-    // Reload tables whenever cafeteria OR time changes
     useEffect(() => {
         if (selectedCafe && date && time) {
             loadTables()
@@ -90,13 +76,6 @@ export default function BookTable() {
         }
     }
 
-    // Replace loadTables function:
-
-    /*
-    * Now we call ONE endpoint instead of two.
-    * The backend does all the comparison work and returns
-    * each table with its status + actual booking details.
-    */
     const loadTables = async () => {
         setLoading(true)
         setSelectedTable(null)
@@ -104,11 +83,11 @@ export default function BookTable() {
         try {
             const startTime = `${date}T${time}:00`
 
-            // Single API call — backend returns all tables with status
+        
             const res = await api.get(
                 `/cafeterias/${selectedCafe}/table-statuses?startTime=${startTime}`
             )
-            setAllTables(res.data.data) // each item has .status, .bookedFrom, .occupiedSeats
+            setAllTables(res.data.data)
         } catch {
             setError('Could not load tables.')
         } finally {
@@ -133,7 +112,7 @@ export default function BookTable() {
                 `Go to "My Bookings" to add colleagues.`
             )
             setSelectedTable(null)
-            loadTables() // refresh so this table now shows red
+            loadTables() 
         } catch (err) {
             setError(err.response?.data?.message || 'Booking failed.')
         } finally {
@@ -223,13 +202,7 @@ export default function BookTable() {
                     {allTables.map(table => {
                         const isFree     = table.status === 'FREE'
                         const isSelected = selectedTable?.id === table.id
-                        /*
-                        * Format the actual booking time for display.
-                        * bookedFrom comes as "2024-01-15T17:00:00" from backend.
-                        * toLocaleTimeString converts it to "5:00 PM" (local format).
-                        *
-                        * We only do this for BOOKED tables.
-                        */
+
                         const bookedAtDisplay = !isFree && table.bookedFrom
                             ? new Date(table.bookedFrom).toLocaleTimeString('en-IN', {
                                 hour: '2-digit',
@@ -272,25 +245,9 @@ export default function BookTable() {
                                     </span>
                                 </div>
 
-                                {/*
-                                * SEAT DOTS — this is the new logic you asked for.
-                                *
-                                * For FREE table:
-                                *   all dots = light green
-                                *
-                                * For BOOKED table:
-                                *   first N dots (N = occupiedSeats) = dark red  → people sitting
-                                *   remaining dots                   = light red → empty seats
-                                *
-                                * Example: maxCapacity=4, occupiedSeats=2
-                                *   dot 0 → dark red  (person 1 sitting)
-                                *   dot 1 → dark red  (person 2 sitting)
-                                *   dot 2 → light red (empty seat)
-                                *   dot 3 → light red (empty seat)
-                                */}
                                 <div className="chairs-row" style={{ marginTop: '8px' }}>
                                     {Array.from({ length: table.maxCapacity }).map((_, i) => {
-                                        // Is this seat occupied?
+                                        
                                         const isOccupied = !isFree && i < (table.occupiedSeats || 0)
                                         
                                         return (
@@ -305,9 +262,9 @@ export default function BookTable() {
                                                     height: 9,
                                                     borderRadius: '50%',
                                                     background:
-                                                        isFree     ? '#9FE1CB' :  // green for free table
-                                                        isOccupied ? '#dc2626' :  // dark red = someone sitting
-                                                                    '#fca5a5',   // light red = empty seat
+                                                        isFree     ? '#9FE1CB' :  
+                                                        isOccupied ? '#dc2626' :  
+                                                                    '#fca5a5',   
                                                     transition: 'background 0.2s'
                                                 }}
                                             />
@@ -315,14 +272,6 @@ export default function BookTable() {
                                     })}
                                 </div>
 
-                                {/*
-                                * Status text — now shows ACTUAL booking time, not viewer's time.
-                                *
-                                * FREE table:   "Free · up to 4 people"
-                                * BOOKED table: "Booked at 5:00 PM · 2/4 seats"
-                                *                               ↑               ↑
-                                *                        actual time      occupied/total
-                                */}
                                 <div style={{
                                     fontSize: '11px', marginTop: '6px', fontWeight: '500',
                                     color: isFree ? '#16a34a' : '#dc2626'

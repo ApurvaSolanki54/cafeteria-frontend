@@ -7,35 +7,30 @@ export default function Login() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')      // shows error message
-    const [loading, setLoading] = useState(false) // disables button while calling API
+    const [error, setError] = useState('')      
+    const [loading, setLoading] = useState(false) 
 
     const { login } = useAuth()
-    const navigate = useNavigate() // lets us redirect to another page
+    const navigate = useNavigate() 
 
     const handleSubmit = async (e) => {
-        e.preventDefault() // stops the page from reloading (default form behaviour)
+        e.preventDefault() 
         setError('')
         setLoading(true)
 
         try {
-            /*
-             * POST /api/auth/login
-             * response.data looks like:
-             * { success: true, message: "Login successful!", data: { token, name, email, role, coinBalance } }
-             */
             const response = await api.post('/auth/login', { email, password })
             const { token, name, role, coinBalance } = response.data.data
 
-            // Save user info + token in context and localStorage
+            
             login({ name, email, role, coinBalance }, token)
 
-            // Redirect based on role
+            
             navigate(role === 'ADMIN' ? '/admin' : '/book')
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.')
         } finally {
-            setLoading(false) // always runs, even if there's an error
+            setLoading(false) 
         }
     }
 
@@ -54,10 +49,6 @@ export default function Login() {
                 {/* Error message — only shows when error is not empty */}
                 {error && <div className="error-box">{error}</div>}
 
-                {/*
-                onSubmit calls handleSubmit when form is submitted.
-                This works for both button click AND pressing Enter.
-                */}
                 <form onSubmit={handleSubmit}>
                     <div className="field">
                         <label htmlFor="email">Email</label>
@@ -67,7 +58,7 @@ export default function Login() {
                             className="input"
                             placeholder="ravi@company.com"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)} // update state on every keystroke
+                            onChange={(e) => setEmail(e.target.value)} 
                             required
                         />
                     </div>

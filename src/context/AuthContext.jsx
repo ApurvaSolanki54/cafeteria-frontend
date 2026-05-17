@@ -28,11 +28,6 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('user')
         setUser(null)
     }
-
-    /*
-     * We provide: user object, login function, logout function
-     * to every child component that asks for it via useAuth() hook below.
-     */
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
@@ -42,7 +37,7 @@ export function AuthProvider({ children }) {
 
 /*
  * Step 3: Custom hook — instead of writing useContext(AuthContext)
- * in every component, we write useAuth(). Much cleaner.
+ * in every component, we write useAuth().
  *
  * Usage in any component:
  * const { user, login, logout } = useAuth()

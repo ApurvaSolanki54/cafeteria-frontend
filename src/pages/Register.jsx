@@ -9,17 +9,7 @@ export default function Register() {
     const [loading, setLoading] = useState(false)
     const { login } = useAuth()
     const navigate = useNavigate()
-
-    /*
-     * Single handler for all fields.
-     * e.target.name reads the "name" attribute of the input.
-     * e.target.value reads what the user typed.
-     *
-     * ...form spreads the existing form values (keeps other fields intact),
-     * then [e.target.name]: e.target.value updates only the changed field.
-     *
-     * Example: typing in name field → { name: "Ravi", email: "", password: "" }
-     */
+    
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }

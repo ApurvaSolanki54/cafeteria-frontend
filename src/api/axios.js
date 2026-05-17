@@ -16,17 +16,8 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-/*
- * RESPONSE INTERCEPTOR
- * Runs automatically after EVERY API response.
- * If the server returns 401 (Unauthorized — token expired),
- * we clear the stored data and redirect to login.
- *
- * This handles the case where someone's token expires
- * while they're using the app — they get sent to login automatically.
- */
 api.interceptors.response.use(
-  (response) => response,  // success — just return the response as-is
+  (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token')

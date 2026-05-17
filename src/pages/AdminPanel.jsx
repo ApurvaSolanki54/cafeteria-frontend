@@ -7,7 +7,6 @@ export default function AdminPanel() {
     const { logout } = useAuth()
     const navigate = useNavigate()
 
-    // tab controls which section is visible: 'cafeterias' or 'tables'
     const [tab, setTab] = useState('cafeterias')
     const [cafeterias, setCafeterias] = useState([])
     const [tables, setTables] = useState([])
@@ -15,11 +14,9 @@ export default function AdminPanel() {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
 
-    // Modal state for adding cafeteria
     const [showCafeModal, setShowCafeModal] = useState(false)
     const [cafeForm, setCafeForm] = useState({ name: '', size: 'LARGE', description: '' })
 
-    // Modal state for adding table
     const [showTableModal, setShowTableModal] = useState(false)
     const [tableForm, setTableForm] = useState({
         tableNumber: '', tableType: 'SMALL', minCapacity: 1, maxCapacity: 4
@@ -87,7 +84,7 @@ export default function AdminPanel() {
     const selectCafeteria = (cafe) => {
         setSelectedCafe(cafe)
         loadTables(cafe.id)
-        setTab('tables') // switch to tables tab when cafeteria is clicked
+        setTab('tables')
     }
 
     return (
@@ -268,7 +265,7 @@ export default function AdminPanel() {
                                 <label>Type</label>
                                 <select className="input" value={tableForm.tableType}
                                     onChange={(e) => {
-                                        // Auto-set default capacities based on type
+                                
                                         const isBig = e.target.value === 'BIG'
                                         setTableForm({
                                             ...tableForm,

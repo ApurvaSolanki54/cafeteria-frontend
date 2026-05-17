@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../api/axios'
 
-// Reuse BottomNav from BookTable (in a real project put this in a shared components folder)
 function BottomNav({ active }) {
     const navigate = useNavigate()
     return (
@@ -28,10 +27,10 @@ export default function MyBookings() {
     const [error, setError] = useState('')
     const [success, setSuccess] = useState('')
 
-    // For adding members
+    
     const [searchName, setSearchName] = useState('')
     const [searchResults, setSearchResults] = useState([])
-    const [activeBookingId, setActiveBookingId] = useState(null) // which booking we're adding to
+    const [activeBookingId, setActiveBookingId] = useState(null) 
 
     useEffect(() => {
         loadMyBookings()
@@ -50,12 +49,12 @@ export default function MyBookings() {
     }
 
     const handleCancel = async (bookingId) => {
-        // window.confirm shows a popup asking "are you sure?"
+        
         if (!window.confirm('Cancel this booking? Coins will not be refunded.')) return
         try {
             await api.delete(`/bookings/${bookingId}`)
             setSuccess('Booking cancelled.')
-            loadMyBookings() // refresh list
+            loadMyBookings() 
         } catch (err) {
             setError(err.response?.data?.message || 'Could not cancel.')
         }
@@ -84,7 +83,7 @@ export default function MyBookings() {
         }
     }
 
-    // Format date for display: "2024-01-15T13:00:00" → "15 Jan, 1:00 PM"
+    
     const formatTime = (dt) => {
         return new Date(dt).toLocaleString('en-IN', {
             day: 'numeric', month: 'short',

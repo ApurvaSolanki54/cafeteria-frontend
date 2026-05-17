@@ -22,10 +22,6 @@ function ProtectedRoute({ children, adminOnly = false }) {
   return children
 }
 
-/*
- * AppRoutes defines what URL shows what page.
- * It's like a table of contents for your app.
- */
 function AppRoutes() {
   const { user } = useAuth()
 
@@ -61,10 +57,6 @@ function AppRoutes() {
   )
 }
 
-/*
- * BrowserRouter enables URL-based navigation (like a real website).
- * AuthProvider wraps everything so all pages can access the logged-in user.
- */
 export default function App() {
   return (
     <BrowserRouter>

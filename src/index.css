@@ -1,11 +1,10 @@
-/* Reset — remove default browser margins and padding */
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-/* Root font and color — whole app inherits from this */
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
@@ -18,19 +17,16 @@ body {
   min-height: 100vh;
 }
 
-/* Simple button reset — we style buttons ourselves */
 button {
   cursor: pointer;
   font-family: inherit;
 }
 
-/* Input reset */
 input, select {
   font-family: inherit;
   font-size: 14px;
 }
 
-/* Utility class — centers content vertically and horizontally */
 .page-center {
   min-height: 100vh;
   display: flex;
@@ -39,7 +35,6 @@ input, select {
   padding: 1rem;
 }
 
-/* Card — white box with shadow, used everywhere */
 .card {
   background: white;
   border-radius: 12px;
@@ -47,7 +42,6 @@ input, select {
   padding: 1.5rem;
 }
 
-/* Form field wrapper */
 .field {
   display: flex;
   flex-direction: column;
@@ -61,7 +55,6 @@ input, select {
   color: #374151;
 }
 
-/* All text inputs and selects share this style */
 .input {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
@@ -76,7 +69,6 @@ input, select {
   border-color: #1D9E75;
 }
 
-/* Primary green button */
 .btn-primary {
   background: #1D9E75;
   color: white;
@@ -98,7 +90,6 @@ input, select {
   cursor: not-allowed;
 }
 
-/* Secondary outline button */
 .btn-secondary {
   background: white;
   color: #374151;
@@ -114,7 +105,6 @@ input, select {
   background: #f9fafb;
 }
 
-/* Error message box */
 .error-box {
   background: #fef2f2;
   border: 1px solid #fecaca;
@@ -125,7 +115,6 @@ input, select {
   margin-bottom: 1rem;
 }
 
-/* Success message box */
 .success-box {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -136,7 +125,6 @@ input, select {
   margin-bottom: 1rem;
 }
 
-/* Loading spinner */
 .spinner {
   display: inline-block;
   width: 18px;
@@ -151,7 +139,6 @@ input, select {
   to { transform: rotate(360deg); }
 }
 
-/* Top navigation bar */
 .navbar {
   background: white;
   border-bottom: 1px solid #e5e7eb;
@@ -174,7 +161,6 @@ input, select {
   gap: 8px;
 }
 
-/* Coin badge in navbar */
 .coin-badge {
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
@@ -185,7 +171,6 @@ input, select {
   font-weight: 500;
 }
 
-/* Bottom tab navigation for mobile */
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -194,7 +179,7 @@ input, select {
   background: white;
   border-top: 1px solid #e5e7eb;
   display: flex;
-  padding-bottom: env(safe-area-inset-bottom); /* handles iPhone notch */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bottom-nav-item {
@@ -219,14 +204,12 @@ input, select {
   font-size: 20px;
 }
 
-/* Page wrapper — adds bottom padding so content is above bottom nav */
 .page-content {
   padding: 1rem 1rem 80px;
   max-width: 640px;
   margin: 0 auto;
 }
 
-/* Section heading */
 .section-title {
   font-size: 15px;
   font-weight: 600;
@@ -234,7 +217,6 @@ input, select {
   margin-bottom: 12px;
 }
 
-/* Table card — the clickable table selector */
 .table-card {
   border: 1.5px solid #e5e7eb;
   border-radius: 10px;
@@ -260,7 +242,6 @@ input, select {
   opacity: 0.7;
 }
 
-/* Chair dots inside table card */
 .chairs-row {
   display: flex;
   gap: 4px;
@@ -279,7 +260,6 @@ input, select {
   background: #fca5a5;
 }
 
-/* Booking list item */
 .booking-item {
   background: white;
   border: 1px solid #e5e7eb;
@@ -317,7 +297,6 @@ input, select {
   color: #dc2626;
 }
 
-/* Admin table rows */
 .admin-list-item {
   display: flex;
   align-items: center;
@@ -330,13 +309,12 @@ input, select {
   border-bottom: none;
 }
 
-/* Modal overlay */
 .modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.4);
   display: flex;
-  align-items: flex-end; /* slides up from bottom on mobile */
+  align-items: flex-end;
   justify-content: center;
   z-index: 50;
   padding: 0;
@@ -364,7 +342,6 @@ input, select {
   }
 }
 
-/* Grid for tables */
 .tables-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
