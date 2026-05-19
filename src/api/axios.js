@@ -5,7 +5,7 @@ import axios from 'axios'
  * The Vite proxy in vite.config.js then forwards "/api" to Spring Boot.
  */
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || '/api',
 })
 
 api.interceptors.request.use((config) => {
@@ -19,7 +19,8 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    console.log("res->", error.response?.status)
+    if (error.response?.status === 403) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
       window.location.href = '/login'  // redirect to login page
