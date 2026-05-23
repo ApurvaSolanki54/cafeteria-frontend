@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+import api from '../api/axios'
 
 // Step 1: Create the context (empty container)
 const AuthContext = createContext(null)
@@ -30,11 +31,32 @@ export function AuthProvider({ children }) {
     }
 
     /*
+   * NEW — refreshUser fetches latest user data from backend.
+   * Call this after any action that changes coin balance
+   * (booking a table, adding a member).
+   *
+   * It updates both React state (setUser) AND localStorage
+   * so the coin count in navbar updates immediately.
+   */
+    const refreshUser = async () => {
+        try {
+            const res = await api.get('/users/me')
+            const freshData = res.data.data
+            // Merge fresh data with existing user (keeps token etc.)
+            const updated = { ...user, ...freshData }
+            localStorage.setItem('user', JSON.stringify(updated))
+            setUser(updated)
+        } catch {
+        // If refresh fails, silently ignore — not critical
+        }
+    }
+
+    /*
      * We provide: user object, login function, logout function
      * to every child component that asks for it via useAuth() hook below.
      */
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
             {children}
         </AuthContext.Provider>
     )
