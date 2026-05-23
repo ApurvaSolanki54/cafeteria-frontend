@@ -71,7 +71,7 @@ export default function BookTable() {
 
         const interval = setInterval(() => {
         loadTables()
-        }, 3000) // 3 seconds
+        }, 500) // 0.5 seconds
 
         return () => clearInterval(interval)
     }, [selectedCafe, date, time])
