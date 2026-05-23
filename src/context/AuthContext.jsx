@@ -30,14 +30,6 @@ export function AuthProvider({ children }) {
         setUser(null)
     }
 
-    /*
-   * NEW — refreshUser fetches latest user data from backend.
-   * Call this after any action that changes coin balance
-   * (booking a table, adding a member).
-   *
-   * It updates both React state (setUser) AND localStorage
-   * so the coin count in navbar updates immediately.
-   */
     const refreshUser = async () => {
         try {
             const res = await api.get('/users/me')
@@ -51,10 +43,6 @@ export function AuthProvider({ children }) {
         }
     }
 
-    /*
-     * We provide: user object, login function, logout function
-     * to every child component that asks for it via useAuth() hook below.
-     */
     return (
         <AuthContext.Provider value={{ user, login, logout, refreshUser }}>
             {children}

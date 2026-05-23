@@ -69,23 +69,10 @@ export default function BookTable() {
         // Don't start polling until cafeteria and time are selected
         if (!selectedCafe || !date || !time) return
 
-        /*
-        * setInterval runs loadTables() every 15 seconds.
-        * Think of it like an alarm that rings every 15 seconds.
-        * We store the alarm ID in "interval" so we can cancel it later.
-        */
         const interval = setInterval(() => {
         loadTables()
-        }, 3000) // 15000 milliseconds = 15 seconds
+        }, 3000) // 3 seconds
 
-        /*
-        * CLEANUP FUNCTION — React calls this automatically when:
-        * 1. The component is removed from screen (user navigates away)
-        * 2. The dependencies [selectedCafe, date, time] change
-        *
-        * clearInterval cancels the alarm so it stops running.
-        * Without this, the interval keeps running forever → memory leak.
-        */
         return () => clearInterval(interval)
     }, [selectedCafe, date, time])
 
@@ -120,20 +107,12 @@ export default function BookTable() {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────
-    // FIX 4 — handleTableClick replaces the old inline onClick.
-    // When user CLICKS a table, we:
-    //   1. Set it as selected (highlight it)
-    //   2. Send a HOLD request so other users see it as orange/pending
-    // ─────────────────────────────────────────────────────────────────
     const handleTableClick = async (table) => {
         // If table is not free, do nothing (can't click a booked table)
         if (table.status !== 'FREE') return
 
-        // Step 1: select the table in UI immediately (feels instant)
         setSelectedTable(table)
 
-        // Step 2: send hold request to backend
         try {
             const startTime = `${date}T${time}:00`
             console.log("startTime for hold ", startTime);
@@ -141,16 +120,8 @@ export default function BookTable() {
                 tableId:   table.id,
                 startTime: startTime
             })
-            /*
-            * After hold is placed, reload tables so THIS user also
-            * sees updated state from backend (confirms hold worked).
-            */
             loadTables()
         } catch {
-            /*
-            * Hold failed — most likely someone else just booked this table
-            * in the same second. Reload to show the latest real state.
-            */
             setError('Table was just taken. Please select another.')
             setSelectedTable(null)
             loadTables()
@@ -169,7 +140,7 @@ export default function BookTable() {
                 startTime,
                 memberIds: []
             })
-            await refreshUser()   // ← ADD THIS — coins update instantly in navbar
+            await refreshUser()
             setSuccess(
                 `Table ${selectedTable.tableNumber} booked! ` +
                 `Go to "My Bookings" to add colleagues.`
@@ -225,7 +196,6 @@ export default function BookTable() {
                 </div>
                 <div className="field">
                     <label>Time</label>
-                    {/* FIX 3 — default value is now current time + 5 min */}
                     <input
                         type="time"
                         className="input"
@@ -245,7 +215,7 @@ export default function BookTable() {
                     background: '#f0fdf4', border: '1.5px solid #1D9E75' }} />
                     Available
                 </div>
-                {/* FIX 4 — added orange legend for pending */}
+
                 <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <div style={{ width: 10, height: 10, borderRadius: 3,
                     background: '#fff7ed', border: '1.5px solid #fed7aa' }} />
@@ -273,27 +243,14 @@ export default function BookTable() {
                 })()}
                 </div>
 
-                {/* ──────────────────────────────────────────────────────
-                    TABLES GRID
-                    This is where all 3 status colours come together.
-                    FIX 4 — isPending and isBooked computed per tile.
-                    FIX 4 — onClick changed to handleTableClick(table).
-                ────────────────────────────────────────────────────── */}
                 <div className="tables-grid">
                 {allTables.map(table => {
 
-                    // ── FIX 4 — compute status flags for THIS tile ──
                     const isFree     = table.status === 'FREE'
                     const isPending  = table.status === 'BOOKED' && table.bookingStatus === 'PENDING'
                     const isBooked   = table.status === 'BOOKED' && table.bookingStatus === 'ACTIVE'
                     const isSelected = selectedTable?.id === table.id
-                    // ────────────────────────────────────────────────
 
-                    /*
-                    * Format actual booking time for display.
-                    * bookedFrom = "2024-01-15T17:00:00" → "5:00 PM"
-                    * Only relevant for ACTIVE booked tables.
-                    */
                     const bookedAtDisplay = isBooked && table.bookedFrom
                     ? new Date(table.bookedFrom).toLocaleTimeString('en-IN', {
                         hour:   '2-digit',
@@ -305,14 +262,13 @@ export default function BookTable() {
                     return (
                     <div
                         key={table.id}
-                        // FIX 4 — use handleTableClick instead of inline setSelectedTable
+
                         onClick={() => handleTableClick(table)}
                         style={{
                         borderRadius: '10px',
                         padding: '12px',
                         transition: 'all 0.15s',
 
-                        // ── FIX 4 — border color: green / orange / red / dark green ──
                         border: `${isSelected ? '2px' : '1.5px'} solid ${
                             isSelected ? '#1D9E75' : // dark green — your selection
                             isBooked   ? '#fca5a5' : // red — confirmed booking
@@ -320,7 +276,6 @@ export default function BookTable() {
                                         '#bbf7d0'  // light green — free
                         }`,
 
-                        // ── FIX 4 — background color matches border ──
                         background:
                             isSelected ? '#dcfce7' : // light green — your selection
                             isBooked   ? '#fef2f2' : // light red — booked
@@ -352,12 +307,11 @@ export default function BookTable() {
 
                         {/* ──────────────────────────────────────────────────
                             SEAT DOTS
-                            Free table    → all dots light green
-                            Pending table → all dots light orange
-                            Booked table  → first N dots dark red (occupied)
+                            Free table    -> all dots light green
+                            Pending table -> all dots light orange
+                            Booked table  -> first N dots dark red (occupied)
                                             remaining dots light red (empty)
 
-                            FIX 4 — added orange dots for pending state
                         ────────────────────────────────────────────────── */}
                         <div className="chairs-row" style={{ marginTop: '8px' }}>
                         {Array.from({ length: table.maxCapacity }).map((_, i) => {
