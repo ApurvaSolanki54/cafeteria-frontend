@@ -20,7 +20,7 @@ function BottomNav({ active }) {
 }
 
 export default function MyBookings() {
-    const { user, logout } = useAuth()
+    const { user, logout, refreshUser } = useAuth()
     const navigate = useNavigate()
     const [bookings, setBookings] = useState([])
     const [loading, setLoading] = useState(true)
@@ -41,6 +41,7 @@ export default function MyBookings() {
         try {
             const res = await api.get('/bookings/my')
             setBookings(res.data.data)
+            console.log(res.data.data)
         } catch {
             setError('Could not load bookings.')
         } finally {
@@ -73,6 +74,7 @@ export default function MyBookings() {
     const handleAddMember = async (bookingId, userId) => {
         try {
             await api.post(`/bookings/${bookingId}/members/${userId}`)
+            await refreshUser()
             setSuccess('Colleague added! 1 coin deducted from their balance.')
             setSearchResults([])
             setSearchName('')
