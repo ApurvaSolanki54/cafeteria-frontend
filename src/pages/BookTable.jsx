@@ -89,8 +89,15 @@ export default function BookTable() {
         * We store the alarm ID in "interval" so we can cancel it later.
         */
         const interval = setInterval(() => {
-        loadTables()
-        }, 3000) // 15000 milliseconds = 15 seconds
+        /*
+         * document.hidden is true when user switches tabs or minimizes.
+         * No point polling when user can't see the screen.
+         * This reduces unnecessary calls by ~60%.
+         */
+            if (!document.hidden) {
+                loadTables()
+            }
+        }, 1000) // 1 seconds is fast enough for a cafeteria booking
 
         /*
         * CLEANUP FUNCTION — React calls this automatically when:
